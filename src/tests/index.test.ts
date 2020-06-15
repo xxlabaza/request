@@ -31,6 +31,17 @@ describe('server test', () => {
     }
   }
 
+  function readBody (request, callback: (body: string) => void) {
+    const chunks = [];
+    request.on('data', chunk => {
+      chunks.push(chunk);
+    });
+    request.on('end', () => {
+      const body = Buffer.concat(chunks).toString();
+      callback(body);
+    });
+  }
+
   beforeAll(done => {
     server = createServer((req, res) => {
       // const url = new URL(req.url);
@@ -40,12 +51,7 @@ describe('server test', () => {
         res.end();
         break;
       case '/post':
-        let chunks = [];
-        req.on('data', chunk => {
-          chunks.push(chunk);
-        });
-        req.on('end', () => {
-          const body = Buffer.concat(chunks).toString();
+        readBody(req, (body: string) => {
           const json = JSON.parse(body);
 
           res.writeHead(201, 'object created', {'Content-Type': 'application/json'});
@@ -84,7 +90,7 @@ describe('server test', () => {
 
     const response = result.orError();
     expect(response.status.code).toBe(201);
-    expect(response.status.text).toEqual("object created");
+    expect(response.status.text).toEqual('object created');
     expect(response.text).toBeNull();
     expect(response.json).toEqual({
       ...json,

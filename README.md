@@ -124,10 +124,15 @@ $> npm test
 
 ...
 
+ PASS  src/tests/index.test.ts
+  server test
+    ✓ request empty GET (51 ms)
+    ✓ post JSON and read response (11 ms)
+
 Test Suites: 1 passed, 1 total
-Tests:       6 passed, 6 total
+Tests:       2 passed, 2 total
 Snapshots:   0 total
-Time:        1.233 s
+Time:        2.846 s
 Ran all test suites.
 ```
 
